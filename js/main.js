@@ -4,7 +4,7 @@ let box = 32;
 let snake = [];
 let food;
 let direcao = "right";
-let jogo = setInterval(iniciarJogo, 150);
+let jogo = setInterval(iniciarJogo, 100);
 
 
 // Posicao da cobrinha
@@ -33,7 +33,7 @@ function criarCobrinha() {
 }
 
 function criarComida() {
-    context.fillStyle = "red";
+    context.fillStyle = "orangered";
     context.fillRect(food.x, food.y, box, box);
 }
 
@@ -51,6 +51,14 @@ function iniciarJogo() {
     let snakeY;
     let newHead;
 
+    
+    for (let i = 1; i < snake.length; i++) {
+        if (snake[0].x == snake[i].x && snake[0].y == snake[i].y) {
+            clearInterval(jogo);
+            alert("Game Over");
+        }
+    }
+
     if (snake[0].x > 15 * box && direcao == "right") snake[0].x = 0;
     if (snake[0].x < 0 && direcao == "left") snake[0].x = 15 * box;
     if (snake[0].y > 15 * box && direcao == "down") snake[0].y = 0;
@@ -60,7 +68,6 @@ function iniciarJogo() {
     criarCobrinha();
     criarComida();
 
-
     snakeX = snake[0].x;
     snakeY = snake[0].y;
 
@@ -69,7 +76,12 @@ function iniciarJogo() {
     if (direcao == 'up') snakeY -= box;
     if (direcao == 'down') snakeY += box;
 
-    snake.pop();
+    if (snakeX != food.x || snakeY != food.y) {
+        snake.pop();
+    } else {
+        food.x =  Math.floor(Math.random() * 15 + 1) * box;
+        food.y =  Math.floor(Math.random() * 15 + 1) * box;
+    }
 
     newHead = {
         x: snakeX,
